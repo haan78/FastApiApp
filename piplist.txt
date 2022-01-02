@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pyjwt
+python-dotenv
+pymongo[srv]
+redis
