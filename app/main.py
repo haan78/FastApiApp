@@ -3,17 +3,18 @@ from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, HTMLResponse
 from pydantic import BaseModel
-from pymongo import MongoClient
 
 from lib.DotEnv import ReadDotEnvFile
 from lib.FastLib import FastLib
 from FastSession.FastMongoSession import FastMongoSession
-
+from data import Data
 import random
 
 settings = ReadDotEnvFile(".env", ["JWTKEY", "DBCONN", "DBNAME"])
 
-fsm = FastMongoSession(MongoClient(settings["DBCONN"]).get_database(settings["DBNAME"]).get_collection("session"), timeout=600)
+database = Data(settings["DBCONN"],settings["DBNAME"])
+
+fsm = FastMongoSession(database.colletion(name="session"), timeout=600)
 
 app = FastAPI()
 
@@ -29,7 +30,7 @@ class testObj(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 async def index_html():
-    return FastLib().html("index.html", {"module": "main", "rndint": "rnd"+str(random.randint(1, 1000))})
+    return FastLib().html("template.html", {"module": "main", "rndint": "rnd"+str(random.randint(1, 1000))})
 
 
 @app.get("/test")
@@ -92,6 +93,11 @@ async def read_items(request: Request):
 async def kill(response: Response):
     fsm.kill(response)
     return "silindi"
+    
+
+@app.get("/uyeler")
+def uyeler():
+    return database.toList( database.colletion("uye").find({}) )
 
 
 if __name__ == "__main__":

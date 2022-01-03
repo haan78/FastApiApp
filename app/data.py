@@ -1,0 +1,53 @@
+from pymongo import MongoClient
+from pymongo.database import Database
+from pymongo.collation import Collation
+from pymongo.cursor import Cursor
+from datetime import datetime
+from bson.objectid import ObjectId
+
+class Data():
+    _connstr: str = None
+    _dbname: str = None
+    _conn: MongoClient = None
+
+    def __init__(self,connstr: str, dbname: str):
+        self._connstr = connstr
+        self._dbname = dbname
+
+    def link(self, new:bool = False) -> MongoClient:
+        if new or self._conn is None:
+            self._conn = MongoClient(self._connstr)
+        return self._conn
+
+    def db(self,dbname: str = None) -> Database:
+        if dbname is None:
+            return self.link().get_database(self._dbname)
+        else:
+            return self.link().get_database(self,dbname)
+    
+    def colletion(self, name: str, dbname: str = None) -> Collation:
+        return self.db(dbname).get_collection(name)
+
+    def documnet(self, doc ):
+        def render( data ):
+            d = data
+            t = type(d)
+            if t is dict:
+                for k in d:
+                    d[k] = render(d[k])
+            elif (t is list) or (t is tuple):
+                for i in range(len(d)):
+                    d[i] = render(d[i])
+            elif t is datetime:
+                d = d.strftime("%Y-%m-%dT%H:%M:%S:000Z")
+            elif t is ObjectId:
+                d = str(d)
+            return d
+
+        return render( doc )
+
+    def toList(self, cur:Cursor) -> list:
+        l = []
+        for doc in cur:
+            l.append( self.documnet(doc) )
+        return l
