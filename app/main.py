@@ -3,22 +3,12 @@ from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, HTMLResponse
 from pydantic import BaseModel
-
-from lib.DotEnv import ReadDotEnvFile
-from lib.FastLib import FastLib
-from FastSession.FastMongoSession import FastMongoSession
-from data import Data
 import random
 
-settings = ReadDotEnvFile(".env", ["JWTKEY", "DBCONN", "DBNAME"])
+from project import Project
 
-database = Data(settings["DBCONN"],settings["DBNAME"])
-
-fsm = FastMongoSession(database.colletion(name="session"), timeout=600)
-
+project = Project()
 app = FastAPI()
-
-FastLib.jwtkey = settings["JWTKEY"]
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/jsdist", StaticFiles(directory="jsdist"), name="jsdist")
@@ -30,7 +20,7 @@ class testObj(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 async def index_html():
-    return FastLib().html("template.html", {"module": "main", "rndint": "rnd"+str(random.randint(1, 1000))})
+    return project.lib.html("template.html", {"module": "main", "rndint": "rnd"+str(random.randint(1, 1000))})
 
 
 @app.get("/test")
@@ -52,13 +42,13 @@ def err():
 
 
 @app.exception_handler(Exception)
-def error(request: Request, exc: Exception):
-    return FastLib().response(exc)
+def error(exc: Exception):
+    return project.lib.response(exc)
 
 
 @app.post("/identity")
 def identity(test: testObj, request: Request):
-    id = FastLib().identity(request)
+    id = project.lib.identity(request)
     return {
         "test": test,
         "id": id
@@ -67,7 +57,7 @@ def identity(test: testObj, request: Request):
 
 @app.post("/identity2")
 async def identity2(request: Request):
-    id = FastLib().identity(request)
+    id = project.lib.identity(request)
     jd = await request.json()
     return {
         "jData": jd,
@@ -76,8 +66,8 @@ async def identity2(request: Request):
 
 
 @app.get("/write")
-def setcoo(response: Response):
-    fsm.write(response, {
+def setcoo(response: Response):    
+    project.session.write(response, {
         "name": "Ali Barış Öztürk"
     })
     return "Yazıldı"
@@ -85,20 +75,24 @@ def setcoo(response: Response):
 
 @app.get("/read")
 async def read_items(request: Request):
-    v = fsm.read(request)
+    v = project.session.read(request)
     return {"ads_id": v}
 
 
 @app.get("/kill")
 async def kill(response: Response):
-    fsm.kill(response)
+    project.session.kill(response)
     return "silindi"
-    
+
 
 @app.get("/uyeler")
 def uyeler():
-    return database.toList( database.colletion("uye").find({}) )
+    return project.session.response(project.data.toList( project.data.colletion("uye").find({"active":True}) ))
 
+
+@app.get("/items/{item_id}")
+def read_root(item_id: str, request: Request):
+    return {"client_host": request.client.host, "item_id": item_id}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=project.port)

@@ -12,6 +12,9 @@ class FastLib:
     jwtalgo = 'HS256'
     identityheadername = 'IDENTITY'
 
+    def __init__(self,jwtkey = None) -> None:
+        self.jwtkey = jwtkey
+
     def identity(self, request: Request):
         header = request.headers.get(self.identityheadername)
         if header is not None:
