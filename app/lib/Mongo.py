@@ -5,7 +5,7 @@ from pymongo.cursor import Cursor
 from datetime import datetime
 from bson.objectid import ObjectId
 
-class Data():
+class Mongo():
     _connstr: str = None
     _dbname: str = None
     _conn: MongoClient = None
