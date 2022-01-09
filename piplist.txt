@@ -1,6 +1,6 @@
-fastapi
-uvicorn
-pyjwt
-python-dotenv
-pymongo[srv]
-redis
+fastapi==0.70.1
+uvicorn==0.16.0
+pyjwt==2.3.0
+python-dotenv==0.19.2
+pymongo==4.0.1
+redis==4.1.0
