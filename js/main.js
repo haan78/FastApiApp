@@ -9,5 +9,5 @@ let app = document.getElementById("app");
 app.innerHTML = "";
 createApp(comp).use(ElementPlus, { locale }).use(subutai).mount(app);
 //createApp(comp).use(subutai).mount(app);
-console.log(window.document.cookie);
-console.log(typeof window.document.cookie);
+//console.log(window.document.cookie);
+//console.log(typeof window.document.cookie);
