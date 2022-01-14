@@ -1,4 +1,6 @@
+from typing import Callable, List
 from pymongo import MongoClient
+from pymongo import cursor
 from pymongo.database import Database
 from pymongo.collation import Collation
 from pymongo.cursor import Cursor
@@ -9,6 +11,8 @@ class Mongo():
     _connstr: str = None
     _dbname: str = None
     _conn: MongoClient = None
+    _cursorFnc: Callable = None
+    TIMESTAMPFORMAT : str = "%Y-%m-%dT%H:%M:%S.000Z"
 
     def __init__(self,connstr: str, dbname: str):
         self._connstr = connstr
@@ -28,7 +32,7 @@ class Mongo():
     def colletion(self, name: str, dbname: str = None) -> Collation:
         return self.db(dbname).get_collection(name)
 
-    def documnet(self, doc ):
+    def _renderDocumnet(self, doc ):
         def render( data ):
             d = data
             t = type(d)
@@ -39,15 +43,33 @@ class Mongo():
                 for i in range(len(d)):
                     d[i] = render(d[i])
             elif t is datetime:
-                d = d.strftime("%Y-%m-%dT%H:%M:%S:000Z")
+                d = d.strftime(self.TIMESTAMPFORMAT)
             elif t is ObjectId:
                 d = str(d)
             return d
 
         return render( doc )
 
-    def toList(self, cur:Cursor) -> list:
+    def assignCurFunc(self) -> Callable:
+        def setfnc(fnc):            
+            self._cursorFnc = fnc
+        return setfnc
+    
+    def freeCurFnc(self):
+        self._cursorFnc = None      
+
+    def toList(self, cur:Cursor, freeCurFnc:bool = True, renderDoc:bool = True ) -> list:
         l = []
         for doc in cur:
-            l.append( self.documnet(doc) )
+            if renderDoc:
+                doc = self._renderDocumnet(doc)
+
+            if self._cursorFnc is None:
+                l.append( doc )
+            else:
+                l.append( self._cursorFnc( doc ) )
+        
+        if freeCurFnc:
+            self.freeCurFnc()
+
         return l
