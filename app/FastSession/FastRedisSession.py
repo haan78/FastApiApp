@@ -19,7 +19,7 @@ class FastRedisSession(FastSessionAbstract):
         _id = str(uuid.uuid4())
         jdata = json.dumps(data)
         self._conn.set(_id, jdata, ex=self._timeout)
-        response.set_cookie(key=self._sessionName, value=_id)
+        response.set_cookie(key=self._sessionName, value=_id, max_age=self._timeout)
         self._lastSessionId = _id
         return _id
 
