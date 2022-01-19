@@ -8,12 +8,13 @@ import re
 
 
 class FastLib:
-    jwtkey = 'dfndsfkldjs--kjrherlkjrhlewrjhwelkrjhewrl'
+    jwtkey:str = 'dfndsfkldjs--kjrherlkjrhlewrjhwelkrjhewrl'
     jwtalgo = 'HS256'
     identityheadername = 'IDENTITY'
 
-    def __init__(self,jwtkey = None) -> None:
-        self.jwtkey = jwtkey
+    def __init__(self,jwtkey : str = None) -> None:
+        if jwtkey is not None:
+            self.jwtkey = jwtkey
 
     def identity(self, request: Request):
         header = request.headers.get(self.identityheadername)
