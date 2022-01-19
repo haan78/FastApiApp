@@ -1,16 +1,11 @@
-from fastapi import FastAPI, Request, Response
-from fastapi.staticfiles import StaticFiles
+from fastapi import Request, Response
 from fastapi.responses import RedirectResponse, HTMLResponse
 from pydantic import BaseModel
 import random
 from project import Project
 
-def router(project:Project)->FastAPI:
-    app = FastAPI()
-    
-    app.mount("/static", StaticFiles(directory="static"), name="static")
-    app.mount("/jsdist", StaticFiles(directory="jsdist"), name="jsdist")
-    
+def router(project:Project):
+    app = project.getApp()
     class testObj(BaseModel):
         test: str
 
@@ -79,5 +74,3 @@ def router(project:Project)->FastAPI:
     @app.get("/items/{item_id}")
     def read_root(item_id: str, request: Request):
         return {"client_host": request.client.host, "item_id": item_id}
-    
-    return app

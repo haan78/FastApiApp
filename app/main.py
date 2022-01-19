@@ -1,6 +1,8 @@
 from project import Project
 from router import router
 
+prj = Project(".env")
+router(prj)
+
 if __name__ == "__main__":
-    prj = Project(".env")
-    Project.run( router(prj),prj.port )
+    prj.run()
