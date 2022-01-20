@@ -1,5 +1,5 @@
 from fastapi import Request, Response
-from FastSession import FastSessionAbstract
+from FastSession.FastSessionAbstract import FastSessionAbstract
 import redis
 import uuid
 import json
@@ -40,4 +40,4 @@ class FastRedisSession(FastSessionAbstract):
         super(FastRedisSession, self).kill(response)
         if self._lastSessionId is not None:
             self._conn.delete(self._lastSessionId)
-        self._lastSessionId = None
+            self._lastSessionId = None
