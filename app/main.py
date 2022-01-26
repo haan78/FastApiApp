@@ -1,4 +1,4 @@
-from fastapi import FastAPI,Response
+from fastapi import FastAPI,Response,Request
 from fastapi.responses import HTMLResponse,RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from lib.FastLib import FastLib
@@ -21,8 +21,8 @@ def create():
         })
 
     @app.get("/logout")
-    def logout(response: Response):       
-        prj.Session().kill(response)
+    def logout(request:Request, response: Response):       
+        prj.Session().kill(request,response)
         return RedirectResponse("/login")
 
     app.include_router(API(prj))

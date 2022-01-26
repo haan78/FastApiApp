@@ -1,5 +1,6 @@
-from typing import Callable
+from typing import Callable, List
 from pymongo import MongoClient
+from pymongo import cursor
 from pymongo.database import Database
 from pymongo.collation import Collation
 from pymongo.cursor import Cursor

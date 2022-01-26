@@ -15,5 +15,6 @@ class FastSessionAbstract:
     def read(self, request: Request):
         pass
 
-    def kill(self, response: Response):
+    def kill(self, request:Request, response: Response):
+        self._lastSessionId = request.cookies.get(self._sessionName)
         response.set_cookie(self._sessionName, value=None, max_age=0)
