@@ -104,23 +104,32 @@ export default {
                         var response;
                         try {
                             response = JSON.parse(HTTP.responseText);
+                            resolve(response);
                         } catch (ex) {
                             ex.name = "JSONParsError";
                             reject(ex,HTTP.responseText);
                             return;
                         }
-                        var msg = self.isAppError(response);
-                        if ( msg === false ) {
-                            resolve(response);
-                        } else {
-                            var err = new Error(msg);
-                            err.name = "ApplicationError";
-                            reject(err,response); //Application error
-                        }
                     } else {
-                        var err = new Error( HTTP.statusText );
-                        err.name = "HTTPError";
-                        reject( err,HTTP.status );
+                        var err = new Error();
+                        err.statusText = HTTP.statusText;
+                        try {
+                            err.json = JSON.parse(HTTP.responseText);                            
+                            if ( err.json.detail ) {
+                                err.message = err.json.detail.toString();
+                                err.name = "ServerDetailedError"
+                                reject( err);
+                            } else {
+                                err.message = "Unknown Error Message"
+                                err.name = "ServerUnknownError"
+                                reject(err);
+                            }
+                        } catch {                            
+                            err.message = HTTP.responseText;
+                            err.name = "ServerRawError";                        
+                            err.json = null;
+                            reject(err);
+                        }
                     }
                     self.down();
                 }

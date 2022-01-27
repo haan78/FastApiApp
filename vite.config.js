@@ -18,9 +18,9 @@ export default defineConfig({
     rollupOptions: {
       input: pages,
       output: {
-        entryFileNames: '[name].js',
-        chunkFileNames: '[name].js',
-        assetFileNames: '[name].[ext]'
+        entryFileNames: 'private/[name].js',
+        chunkFileNames: 'public/[name].js',
+        assetFileNames: 'public/[name].[ext]'
       }
     }
   }
