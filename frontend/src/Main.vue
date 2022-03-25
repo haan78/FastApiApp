@@ -8,7 +8,7 @@
       <Edit/>
     </el-icon>
     <el-date-picker v-model="v2" placeholder="" format="DD/MM/YYYY" value-format="YYYY-MM-DDTHH:mm:ss.SSSZ"></el-date-picker>
-    <el-button type="primary">OK2</el-button>
+    <el-button type="primary">YES</el-button>
   </div>
 </template>
 <style>

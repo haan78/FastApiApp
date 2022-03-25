@@ -1,15 +1,12 @@
 FROM node:17.8-alpine3.14
-#COPY ./sh_npm.sh /npm.sh
 #COPY ./sh_bekle.sh /bekle.sh
 RUN npm install -g @vue/cli
 
 WORKDIR /app
+COPY ./sh_npm.sh /app/npm.sh
 COPY ./package.json /app/package.json
 #COPY ./vue.config.js /app/vue.config.js
 
 RUN npm install
 
-#CMD ["npm","run","dev"]
-#CMD ["top"]
-CMD ["npm","run","dev"]
-##ENTRYPOINT ["tail", "-f", "/dev/null"]
+CMD ["sh", "/app/npm.sh" ]

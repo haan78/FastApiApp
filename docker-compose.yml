@@ -18,7 +18,8 @@ services:
       context: ./docker
       dockerfile: dockerfile_npm
     environment:
-      - "script=dev"
+      #- "script=pro" ## Production icin bunu ac altakini kapat
+      - "script=dev" ## Development icin bunu ac script = dev,devbuild,pro
       - "TZ=Turkey"
       - "NODE_OPTIONS=--openssl-legacy-provider"
     volumes:
