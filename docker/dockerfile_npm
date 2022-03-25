@@ -5,10 +5,11 @@ RUN npm install -g @vue/cli
 
 WORKDIR /app
 COPY ./package.json /app/package.json
-COPY ./vue.config.js /app/vue.config.js
+#COPY ./vue.config.js /app/vue.config.js
 
 RUN npm install
 
 #CMD ["npm","run","dev"]
-CMD ["top"]
+#CMD ["top"]
+CMD ["npm","run","dev"]
 ##ENTRYPOINT ["tail", "-f", "/dev/null"]

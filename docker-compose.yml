@@ -11,7 +11,7 @@ services:
       - "8001:8001"
     volumes:
       - "./beckend:/app:consistent"
-      - "./frontend/static:/static:r"
+      - "./static:/static:r"
 
   npm1:
     build:
@@ -22,7 +22,9 @@ services:
       - "TZ=Turkey"
       - "NODE_OPTIONS=--openssl-legacy-provider"
     volumes:
-      - "./frontend:/app"
+      - "./frontend/src:/app/src:consistent"
+      - "./frontend/vue.config.js:/app/vue.config.js"
+      - "./static:/app/static:rw"
 
   mongodb:
     image: mongo:5.0.3
