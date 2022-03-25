@@ -7,4 +7,4 @@ RUN apk add openssl
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r piplist.txt
 
-CMD ["sh","/fastapi.sh"]s
+CMD ["sh","/fastapi.sh"]
