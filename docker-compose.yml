@@ -11,7 +11,7 @@ services:
       - "8001:8001"
     volumes:
       - "./beckend:/app:consistent"
-      - "./static:/static:r"
+      - "./static:/static"
 
   npm1:
     build:
