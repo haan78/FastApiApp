@@ -12,7 +12,7 @@
   </div>
 </template>
 <style>
-@import "element-plus/theme-chalk/index.css";
+/*@import "element-plus/theme-chalk/index.css";*/
 </style>
 <script>
 import { Search,Edit } from "@element-plus/icons-vue";

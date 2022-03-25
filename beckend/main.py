@@ -10,8 +10,7 @@ from api import API
 def create():
     prj = Project(".env")
     app = FastAPI()
-    app.mount("/static", StaticFiles(directory="static"), name="static")
-    app.mount("/jsdist", StaticFiles(directory="jsdist"), name="jsdist")
+    app.mount("/static", StaticFiles(directory="/static"), name="static")
         
     @app.get("/login",response_class=HTMLResponse)
     def login():

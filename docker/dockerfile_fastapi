@@ -1,10 +1,10 @@
 FROM python:3.11.0a3-alpine3.15
-
 WORKDIR /app
 
 COPY piplist.txt ./
+COPY sh_fastapi.sh /fastapi.sh
 RUN apk add openssl
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r piplist.txt
 
-CMD ["sh","run.sh"]
+CMD ["sh","/fastapi.sh"]s

@@ -5,6 +5,7 @@ from pymongo.database import Database
 from pymongo.collation import Collation
 from pymongo.cursor import Cursor
 from datetime import datetime
+from datetime import date
 from bson.objectid import ObjectId
 
 class Mongo():
@@ -13,6 +14,7 @@ class Mongo():
     _conn: MongoClient = None
     _cursorFnc: Callable = None
     TIMESTAMPFORMAT : str = "%Y-%m-%dT%H:%M:%S.000Z"
+    DATEFORMAT : str = "%Y-%m-%dT00:00:00.000Z"
 
     def __init__(self,connstr: str, dbname: str):
         self._connstr = connstr
@@ -44,6 +46,8 @@ class Mongo():
                     d[i] = render(d[i])
             elif t is datetime:
                 d = d.strftime(self.TIMESTAMPFORMAT)
+            elif t is date:
+                d = d.strftime(self.DATEFORMAT)
             elif t is ObjectId:
                 d = str(d)
             return d

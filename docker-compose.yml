@@ -3,14 +3,26 @@ version: "3.8"
 services:
   py1:
     build:
-      context: ./
-      dockerfile: dockerfile
+      context: ./docker
+      dockerfile: dockerfile_fastapi
     environment:
       - "TZ=Turkey"
     ports:
       - "8001:8001"
     volumes:
-      - "./app:/app:consistent"
+      - "./beckend:/app:consistent"
+      - "./frontend/static:/static:r"
+
+  npm1:
+    build:
+      context: ./docker
+      dockerfile: dockerfile_npm
+    environment:
+      - "script=dev"
+      - "TZ=Turkey"
+      - "NODE_OPTIONS=--openssl-legacy-provider"
+    volumes:
+      - "./frontend:/app"
 
   mongodb:
     image: mongo:5.0.3
@@ -23,8 +35,8 @@ services:
     expose:
       - "27017"
     volumes:
-      - ./mongotool.sh:/archives/mongotool.sh
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./docker/mongotool.sh:/archives/mongotool.sh
+      - ./docker/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - pymongodbvol:/data/db
   
 volumes:
