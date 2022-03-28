@@ -16,10 +16,8 @@ services:
   npm1:
     build:
       context: ./docker
-      dockerfile: dockerfile_npm
+      dockerfile: dockerfile_npm_dev ## production icin bu dosya dockerfile_npm_pro olacak
     environment:
-      #- "script=pro" ## Production icin bunu ac altakini kapat
-      - "script=dev" ## Development icin bunu ac script = dev,devbuild,pro
       - "TZ=Turkey"
       - "NODE_OPTIONS=--openssl-legacy-provider"
     volumes:
