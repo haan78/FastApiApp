@@ -1,5 +1,4 @@
 __pycache__/
 *.py[cod]
-static/*
 static/dist/*
 static/dist/js/chunk-vendors.js
