@@ -7,6 +7,7 @@ from pymongo.cursor import Cursor
 from datetime import datetime
 from datetime import date
 from bson.objectid import ObjectId
+from dateutil import parser
 
 class Mongo():
     _connstr: str = None
@@ -30,6 +31,14 @@ class Mongo():
             return self.link().get_database(self._dbname)
         else:
             return self.link().get_database(self,dbname)
+    
+    def ISOToDate(self,iso:str)->date:
+        dt:datetime = parser.isoparse(iso)
+        return date(dt.year,dt.month,dt.day)
+
+    def ISOtoDateTime(self,iso:str)->datetime:
+        return parser.isoparse(iso)
+
     
     def colletion(self, name: str, dbname: str = None) -> Collation:
         return self.db(dbname).get_collection(name)

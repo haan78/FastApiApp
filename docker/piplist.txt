@@ -5,3 +5,4 @@ python-dotenv==0.19.2
 pymongo==4.0.1
 redis==4.1.0
 mysql-connector-python==8.0.28
+python-dateutil==2.8.2
