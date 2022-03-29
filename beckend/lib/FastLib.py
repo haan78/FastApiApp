@@ -44,7 +44,7 @@ class FastLib:
                     i += 1
                 s += "]"
             elif type(data) is datetime.datetime:
-                s += "\""+data.strftime("%Y-%m-%d, %H:%M:%S")+"\""
+                s += "\""+data.strftime("%Y-%m-%d %H:%M:%S")+"\""
             elif type(data) is datetime.date:
                 s += "\""+data.strftime("%Y-%m-%d")+"\""
             elif type(data) is bool:
