@@ -16,7 +16,6 @@
 </style>
 <script>
 import { Search,Edit } from "@element-plus/icons-vue";
-import SubutaiCookie from "./lib/SubutaiCookie";
 export default {
   name: 'Main',
   components:{ Search,Edit },
@@ -29,7 +28,7 @@ export default {
     }
   },
   created() {    
-    var cl = SubutaiCookie.get("BEDATA",{ json64:true });
+    var cl = this.$subutai.cookie.get("BEDATA",{ json64:true });
     console.log( cl );
     
   }

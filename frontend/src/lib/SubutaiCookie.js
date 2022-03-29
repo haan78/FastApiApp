@@ -3,7 +3,6 @@ export default {
     get(name,options) {
         var op = {
             "removeAfterRead":false,
-            "refresh":false,
             "json64":false
         };
 
@@ -17,7 +16,7 @@ export default {
         
         var value = this.__cookie(name,op.removeAfterRead);
         if ( op.json64 ) {            
-            return this.__b64DecodeUnicode(value);
+            return JSON.parse(this.__b64DecodeUnicode(value));
         } else {
             return value;
         }
