@@ -1,11 +1,10 @@
-export default {
-    COOKIE_NAME:"SUBUTAI",
-    COOKIE_DATA : false,
+export default {    
 
-    get(options) {
+    get(name,options) {
         var op = {
             "removeAfterRead":false,
-            "refresh":false
+            "refresh":false,
+            "json64":false
         };
 
         if ( typeof options === "object" && options !== null ) {
@@ -14,19 +13,33 @@ export default {
                     op[key] = options[key];
                 }
             });
-        }        
-        
-        if ( op.refresh || this.COOKIE_DATA === false ) {
-            this.COOKIE_DATA = this.__cookie(op.removeAfterRead);
         }
-        return this.COOKIE_DATA;
+        
+        var value = this.__cookie(name,op.removeAfterRead);
+        if ( op.json64 ) {            
+            return this.__b64DecodeUnicode(value);
+        } else {
+            return value;
+        }
     },
-    __remove() {
-        window.document.cookie = encodeURIComponent(this.COOKIE_NAME) + "=; Max-Age=0;";
+
+    __b64DecodeUnicode(str) {
+        return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
+            var code = p.charCodeAt(0).toString(16).toUpperCase();
+            if (code.length < 2) {
+                code = '0' + code;
+            }
+            return '%' + code;
+        }));
     },
-    __cookie(remove) {
+
+    __remove(name) {
+        window.document.cookie = encodeURIComponent(name) + "=; Max-Age=0;";
+    },
+
+    __cookie(name,remove) {
         const value = "; " + window.document.cookie;
-        const parts = value.split("; " + this.COOKIE_NAME + "=");
+        const parts = value.split("; " + name + "=");
         //console.log(parts);
         if (parts.length == 2) {
             const vlu = parts.pop().split(";").shift();
