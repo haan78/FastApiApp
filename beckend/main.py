@@ -19,7 +19,6 @@ def create():
                 "tarih":datetime.now(),
                 "isim":"Ali Barış Öztürk"
             },True)
-        print(v)
         return FastLib.template("template.html",{
             "rnd":"rnd"+str(random.randint(1,1000)).rjust(4,"0"),
             "module":"login"          
