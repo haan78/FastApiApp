@@ -32,6 +32,9 @@ class FastMongoSession(FastSessionAbstract):
 
         self._coll.create_index([("time", 1)], name=indexname, expireAfterSeconds=self._timeout)
 
+    def generateID(self) -> str:
+        return str( ObjectId() )
+
     def writeHandler(self, id: str, data):        
         self._coll.insert_one({
             "_id" : ObjectId(id),

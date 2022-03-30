@@ -3,33 +3,40 @@ from fastapi import FastAPI,Response,Request
 from fastapi.responses import HTMLResponse,RedirectResponse
 from fastapi.staticfiles import StaticFiles
 import random
+
 from lib.FastLib import FastLib
 from project import Project
 
 from api import API
+from auth import AUTH
 
 def create():
     prj = Project(".env")
     app = FastAPI()
     app.mount("/static", StaticFiles(directory="/static"), name="static")
-        
-    @app.get("/login",response_class=HTMLResponse)
-    def login():
-        v = FastLib.toJS({
-                "tarih":datetime.now(),
-                "isim":"Ali Barış Öztürk"
-            },True)
-        return FastLib.template("template.html",{
-            "rnd":"rnd"+str(random.randint(1,1000)).rjust(4,"0"),
-            "module":"login"          
-        },{"BEDATA":v})
+    
+    def main(request:Request):
+        s = prj.Session().read(request=request)
+        print(s,type(s))
+        if s is not None:
+            v = FastLib.toJS(s,True)
+            return FastLib.template("template.html",{
+                "rnd":"rnd"+str(random.randint(1,1000)).rjust(4,"0"),
+                "module":"main"          
+            },{"BEDATA":v})
+        else:
+            return RedirectResponse("/auth/login/hata",status_code=302)
 
-    @app.get("/logout")
-    def logout(request:Request, response: Response):       
-        prj.Session().kill(request,response)
-        return RedirectResponse("/login")
+    @app.get("/",response_class=HTMLResponse)
+    def login(request:Request):
+        return main(request=request)
+
+    @app.post("/",response_class=HTMLResponse)
+    def login(request:Request):
+        return main(request=request)
 
     app.include_router(API(prj))
+    app.include_router(AUTH(prj))
 
     return app
 

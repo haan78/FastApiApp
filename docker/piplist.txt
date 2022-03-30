@@ -6,3 +6,4 @@ pymongo==4.0.1
 redis==4.1.0
 mysql-connector-python==8.0.28
 python-dateutil==2.8.2
+python-multipart==0.0.5
