@@ -7,6 +7,7 @@ services:
       dockerfile: dockerfile_fastapi
     environment:
       - "TZ=Turkey"
+      - "MODE=dev" ##production icin bunu kaldirin.
     ports:
       - "8001:8001"
     volumes:

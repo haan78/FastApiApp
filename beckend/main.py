@@ -17,7 +17,6 @@ def create():
     
     def main(request:Request):
         s = prj.Session().read(request=request)
-        print(s,type(s))
         if s is not None:
             v = FastLib.toJS(s,True)
             return FastLib.template("template.html",{

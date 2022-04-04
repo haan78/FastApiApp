@@ -32,7 +32,7 @@ def AUTH(prj:Project)->APIRouter:
         
 
     @auth.get("/jwt/{ token }",response_class=RedirectResponse)
-    def jwt(token:str):
+    async def jwt(token:str):
         pass
 
     return auth
