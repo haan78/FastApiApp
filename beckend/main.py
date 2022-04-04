@@ -34,6 +34,11 @@ def create():
     def login(request:Request):
         return main(request=request)
 
+    @app.get("/err")
+    def err():
+        raise "HATA"
+
+
     app.include_router(API(prj))
     app.include_router(AUTH(prj))
 
