@@ -1,4 +1,3 @@
-from pydantic import BaseModel
 from project import Project
 from fastapi import Request, APIRouter, HTTPException
 from lib.FastApiBarisJSONRoute import FastApiBarisJSONRoute
