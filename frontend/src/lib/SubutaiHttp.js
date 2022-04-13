@@ -1,7 +1,10 @@
 export default {
     default:{
-        charset: "UTF-8",
-        useDataTransform:true
+        charset: "UTF-8",        
+        method: "POST",
+        jsonDataFormat:true,
+        responseParser:null,
+        data:null
     },
     activeRequestCount:0,
 
@@ -40,26 +43,49 @@ export default {
         }
     },
 
-    dataTransform(data,level) {
+    queryTransform(obj) {
+        var str = [];
+        for (var p in obj) {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+        }            
+        return str.join("&");
+    },
+
+    toISODateTimeFromat(d) {
+        var tz = d.toString().split(" ").slice(-1)[0].trim().replace(/\(|\)|GMT/gm,'')
+        var str = d.getFullYear()+
+        "-"+(""+(d.getMonth()+1)).padStart(2,"0")+
+        "-"+(""+d.getDate()).padStart(2,"0")+
+        "T"+(""+d.getHours()).padStart(2,"0")+
+        ":"+(""+d.getMinutes()).padStart(2,"0")+
+        ":"+(""+d.getSeconds()).padStart(2,"0")+
+        "."+(""+d.getMilliseconds()).padStart(3,"0")+
+        tz;
+        return str;
+    },
+
+    jsonTransform(data,level) {
         var l = ( level ? level : 0 );
         if ( data === null ) {
             return null;
         } else if ( typeof data === "object") { //object
-            if (Array.isArray( data )) {
+            if (data instanceof Date) {
+                return this.toISODateTimeFromat(data);
+            } else if (Array.isArray( data )) {
                 var arr = [];
                 for(var i=0; i<data.length; i++) {
-                    arr.push( this.dataTransform(data[i]),l+1 );
+                    arr.push( this.jsonTransform(data[i]),l+1 );
                 }
                 return arr;
             } else {
                 var obj = {};
                 for( var k in data ) {
-                    obj[k] = this.dataTransform( data[k],l+1 );
+                    obj[k] = this.jsonTransform( data[k],l+1 );
                 }
                 return obj;
             }
         } else if (typeof data === "function") {
-            return this.dataTransform( data(l),l+1 );
+            return this.jsonTransform( data(l),l+1 );
         } else if (typeof data === "string" ) {
             var str = data.trim();
             if ( str === "" ) {
@@ -67,13 +93,48 @@ export default {
             } else {
                 return str;
             }
-        } else if (data instanceof Date) {
-            return data.toISOString();
         } else {
             return data;
         }
     },
-    request(url,data,settings) {
+    __getDataCharacteristics(data,jsonDataFormat) {
+        if ( typeof data === "function" ) {
+            return this.__transform(data(),jsonDataFormat);
+        } else if ( typeof data === "string" && data.trim() !== "" ) {
+            return {
+                "ContentType":"application/x-www-form-urlencoded",
+                "method":"POST",
+                "data":data.trim()
+            };
+        } else if ( data instanceof FormData ) {            
+            return {
+                "ContentType":"multipart/form-data",
+                "method":"POST",
+                "data":data
+            };
+        } else if ( typeof data === "object" && data !== null ) { //multipart/form-data
+            if ( jsonDataFormat ) {
+                return {
+                    "ContentType":"application/json",
+                    "method":"POST",
+                    "data":JSON.stringify(this.jsonTransform(data))
+                };
+            } else {
+                return {
+                    "ContentType":"application/x-www-form-urlencoded",
+                    "method":"POST",
+                    "data":this.queryTransform(data)
+                };                
+            }           
+        } else {
+            return {
+                "ContentType":"application/x-www-form-urlencoded",
+                "method":"GET",
+                "data":null
+            };
+        }
+    },
+    request(url,settings) {
         let self = this;
 
         let sett = self.default;
@@ -91,10 +152,14 @@ export default {
                     if (HTTP.status === 200) {
                         var response;
                         try {
-                            response = JSON.parse(HTTP.responseText);
+                            if ( typeof sett.responseParser === "function" ) {
+                                response = sett.responseParser(HTTP.responseText);
+                            } else {
+                                response = JSON.parse(HTTP.responseText);
+                            }                            
                             resolve(response);
                         } catch (ex) {
-                            ex.name = "JSONParsError";
+                            ex.name = "ResponseParsError";
                             reject(ex,HTTP.responseText);
                             return;
                         }
@@ -123,16 +188,12 @@ export default {
                 }
             }
 
-            HTTP.open("POST", url, true);
-            HTTP.setRequestHeader("Content-type", "application/json;charset=" + sett.charset);
-            var d; 
-            if (sett.useDataTransform) {
-                d = self.dataTransform(data);
-            } else {
-                d = data;
-            }
             self.up();
-            HTTP.send(JSON.stringify(d));
+            var dc = this.__getDataCharacteristics(sett.data,sett.jsonDataFormat);
+
+            HTTP.open(dc.method, url, true);
+            HTTP.setRequestHeader("Content-type", dc.ContentType+";charset=" + sett.charset);            
+            HTTP.send(dc.data);
         } );
     }
 }

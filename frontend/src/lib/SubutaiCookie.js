@@ -15,7 +15,7 @@ export default {
         }
         
         var value = this.__cookie(name,op.removeAfterRead);
-        if ( op.json64 ) {            
+        if ( op.json64 && typeof value === "string" ) {            
             return JSON.parse(this.__b64DecodeUnicode(value));
         } else {
             return value;
@@ -39,7 +39,8 @@ export default {
     __cookie(name,remove) {
         const value = "; " + window.document.cookie;
         const parts = value.split("; " + name + "=");
-        //console.log(parts);
+
+        //console.log(parts,typeof parts);
         if (parts.length == 2) {
             const vlu = parts.pop().split(";").shift();
             const decode_vlu = decodeURIComponent(vlu);
