@@ -1,5 +1,4 @@
-from datetime import datetime
-from fastapi import FastAPI,Response,Request
+from fastapi import FastAPI,Request
 from fastapi.responses import HTMLResponse,RedirectResponse
 from fastapi.staticfiles import StaticFiles
 import random
