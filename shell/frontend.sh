@@ -1,6 +1,4 @@
 #!/bin/sh
-
-cd /app
 script=$(printenv script)
 
 if [ ! -z "$script" ]

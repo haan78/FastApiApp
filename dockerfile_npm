@@ -1,0 +1,13 @@
+FROM node:17.8-alpine3.14 AS build
+ENV TZ=Turkey
+ENV NODE_OPTIONS=--openssl-legacy-provider
+RUN npm install -g @vue/cli
+COPY ./frontend /frontend
+WORKDIR /frontend
+RUN npm install
+
+FROM build AS production
+CMD ["npm", "run", "build" ]
+
+FROM build AS development
+CMD ["npm", "run", "dev" ]

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vue-cli-service build --mode development --watch",
     "devbuild": "vue-cli-service build --mode development",
-    "pro": "vue-cli-service build --mode production"
+    "build": "vue-cli-service build --mode production"
   },
   "dependencies": {
     "core-js": "^3.6.5",

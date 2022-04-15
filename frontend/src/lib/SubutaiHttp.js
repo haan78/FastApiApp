@@ -136,15 +136,7 @@ export default {
     },
     request(url,settings) {
         let self = this;
-
-        let sett = self.default;
-        if ( typeof settings === "object" && settings!==null ) {
-            for(var k in self.default) {
-                if ( typeof settings[k] !== "undefined" ) {
-                    sett[k] = settings[k];
-                }
-            }
-        }
+        let sett = ( settings !== null && typeof settings === "object" ) ? Object.assign(Object.create(self.default),settings) : Object.create(self.default);        
         return new Promise( (resolve,reject)=>{
             var HTTP = new XMLHttpRequest();
             HTTP.onreadystatechange = () =>{
@@ -189,7 +181,7 @@ export default {
             }
 
             self.up();
-            var dc = this.__getDataCharacteristics(sett.data,sett.jsonDataFormat);
+            var dc = self.__getDataCharacteristics(sett.data,sett.jsonDataFormat);
 
             HTTP.open(dc.method, url, true);
             HTTP.setRequestHeader("Content-type", dc.ContentType+";charset=" + sett.charset);            

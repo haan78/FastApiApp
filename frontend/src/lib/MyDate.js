@@ -36,7 +36,25 @@ export default {
             return "";
         }
     },
-    diffDays(date1, date2) {
-        return Math.floor((Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate())) / (1000 * 60 * 60 * 24));
+    diffDays(date1, date2, as) {
+        var val = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+        if ( as == "year" ) {
+            return Math.floor( val/(1000 * 60 * 60 * 24 * 365 ));
+        } else if ( as == "month" ) {
+            return Math.floor( val/(1000 * 60 * 60 * 24 * 30 ));
+        } else if ( as == "week" ) {
+            return Math.floor( val/(1000 * 60 * 60 * 24 * 7 ));
+        } else if ( as == "day" ) {
+            return Math.floor( val/(1000 * 60 * 60 * 24 ));
+        } else if ( as == "hour" ) {
+            return Math.floor( val/(1000 * 60 * 60 ));
+        } else if ( as == "minute" ) {
+            return Math.floor( val/(1000 * 60 ));
+        } else if (as == "second") {
+            return Math.floor( val/(1000));
+        } else {
+            return val;
+        }
+        
     }
 }

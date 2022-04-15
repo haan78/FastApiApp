@@ -3,28 +3,26 @@ version: "3.8"
 services:
   py1:
     build:
-      context: ./docker
+      context: .
       dockerfile: dockerfile_fastapi
-    environment:
-      - "TZ=Turkey"
-      - "MODE=dev" ##production icin bunu kaldirin.
+      target: development
+    restart: on-failure
     ports:
       - "8001:8001"
     volumes:
-      - "./beckend:/app:consistent"
+      - "./backend:/backend:consistent"
       - "./static:/static"
 
   npm1:
     build:
-      context: ./docker
-      dockerfile: dockerfile_npm_dev ## production icin bu dosya dockerfile_npm_pro olacak
-    environment:
-      - "TZ=Turkey"
-      - "NODE_OPTIONS=--openssl-legacy-provider"
+      context: .
+      dockerfile: dockerfile_npm
+      target: development
+    restart: on-failure
     volumes:
-      - "./frontend/src:/app/src:consistent"
-      - "./frontend/vue.config.js:/app/vue.config.js"
-      - "./static:/app/static:rw"
+      - "./frontend/src:/frontend/src:consistent"
+      - "./frontend/vue.config.js:/frontend/vue.config.js"
+      - "./static:/static:rw"
 
   mongodb:
     image: mongo:5.0.3
@@ -37,8 +35,8 @@ services:
     expose:
       - "27017"
     volumes:
-      - ./docker/mongotool.sh:/archives/mongotool.sh
-      - ./docker/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./shell/mongotool.sh:/archives/mongotool.sh
+      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - pymongodbvol:/data/db
   
 volumes:

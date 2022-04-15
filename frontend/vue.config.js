@@ -6,7 +6,7 @@ module.exports = {
   },
 
   filenameHashing: false,
-  outputDir:"./static/dist",
+  outputDir:"/static/dist",
   // delete HTML related webpack plugins
   chainWebpack: config => {
     config.plugins.delete('html')
