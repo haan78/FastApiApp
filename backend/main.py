@@ -10,7 +10,7 @@ from api import API
 from auth import AUTH
 
 def create():
-    prj = Project(".env")
+    prj = Project("/etc/app.env")
     app = FastAPI()
     app.mount("/static", StaticFiles(directory="/static"), name="static")
     

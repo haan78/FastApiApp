@@ -36,6 +36,20 @@ export default {
             return "";
         }
     },
+    secondsToStr(seconds,noseconds) {
+        if ( isNaN(parseInt(seconds)) ) {
+            return "";
+        }
+        var h = Math.floor(parseInt(seconds) / 3600 );
+        var v = parseInt(seconds) % 3600;
+        var m = Math.floor( v / 60 );
+        var s = v % 60;
+        if (noseconds) {
+            return (h+"").padStart(2,"0")+":"+(m+"").padStart(2,"0");
+        } else {
+            return (h+"").padStart(2,"0")+":"+(m+"").padStart(2,"0")+":"+(s+"").padStart(2,"0");
+        }
+    },
     diffDays(date1, date2, as) {
         var val = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
         if ( as == "year" ) {

@@ -29,7 +29,8 @@ export default {
                 this.onStart();
             }
         } 
-        this.activeRequestCount += 1;       
+        this.activeRequestCount += 1; 
+        //console.log(["UP",this.activeRequestCount]);      
     },
 
     down() {
@@ -41,6 +42,7 @@ export default {
                 this.onStop();
             }
         }
+        //console.log(["DOWN",this.activeRequestCount]);
     },
 
     queryTransform(obj) {
@@ -99,7 +101,7 @@ export default {
     },
     __getDataCharacteristics(data,jsonDataFormat) {
         if ( typeof data === "function" ) {
-            return this.__transform(data(),jsonDataFormat);
+            return this.__getDataCharacteristics(data(),jsonDataFormat);
         } else if ( typeof data === "string" && data.trim() !== "" ) {
             return {
                 "ContentType":"application/x-www-form-urlencoded",

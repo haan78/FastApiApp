@@ -8,9 +8,14 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r piplist.txt
 EXPOSE 8001
 
-FROM build AS production
-COPY ./production.env /backend/.env
+FROM build AS development
+COPY ./env-development.env /etc/app.env
+ENTRYPOINT uvicorn --reload --port=8001 --host=0.0.0.0 main:APP
+
+FROM build AS staging
+COPY ./env-staging.env /etc/app.env
 ENTRYPOINT uvicorn --port=8001 --host=0.0.0.0 main:APP
 
-FROM build AS development
-ENTRYPOINT uvicorn --reload --port=8001 --host=0.0.0.0 main:APP
+FROM build AS production
+COPY ./env-production.env /etc/app.env
+ENTRYPOINT uvicorn --port=8001 --host=0.0.0.0 main:APP
