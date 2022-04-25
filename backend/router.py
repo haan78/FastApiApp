@@ -9,7 +9,7 @@ from project import Project
 from api import API
 from auth import AUTH
 
-def create():
+def Router():
     prj = Project("/etc/app.env")
     app = FastAPI()
     app.mount("/static", StaticFiles(directory="/static"), name="static")
@@ -42,6 +42,4 @@ def create():
     app.include_router(AUTH(prj))
 
     return app
-
-APP=create()
 

@@ -2,7 +2,7 @@
 cdir=$(pwd)
 dist=$cdir/static/dist
 image=fastapi/imagename
-npmimg=nobetyazici/npm
+npmimg=fastapi/npm
 taget=staging
 
 npmid=$(docker images -q $npmimg)
@@ -31,10 +31,11 @@ docker run -ti -v $cdir/static:/static:consistent $npmid $cdir
 if [ -d "$dist" ]
 then
     rm -rf $dist/*.html
-    docker build -f $cdir/dockerfile_fastapi --target $taget -t $image $cdir    
+    docker build -f $cdir/dockerfile_fastapi --target $taget -t $image $cdir
+    appid=$(docker images -q $image)
     if [ ! -z "$appid" ]
-    then
-        echo $appid
+    then        
+        echo "Image Name = $image, Image ID = $appid"
         exit 0
     else
         echo "Application image can't create"

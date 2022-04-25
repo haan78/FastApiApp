@@ -1,4 +1,5 @@
 FROM python:3.11.0a3-alpine3.15 AS build
+ARG POTR = 8001
 ENV TZ=Turkey
 RUN apk add openssl
 COPY ./backend /backend
@@ -6,16 +7,17 @@ COPY ./static /static
 WORKDIR /backend
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r piplist.txt
-EXPOSE 8001
+
+EXPOSE $PORT
 
 FROM build AS development
 COPY ./env-development.env /etc/app.env
-ENTRYPOINT uvicorn --reload --port=8001 --host=0.0.0.0 main:APP
+ENTRYPOINT python development $PORT
 
 FROM build AS staging
 COPY ./env-staging.env /etc/app.env
-ENTRYPOINT uvicorn --port=8001 --host=0.0.0.0 main:APP
+ENTRYPOINT python staging $PORT
 
 FROM build AS production
 COPY ./env-production.env /etc/app.env
-ENTRYPOINT uvicorn --port=8001 --host=0.0.0.0 main:APP
+ENTRYPOINT python production $PORT
