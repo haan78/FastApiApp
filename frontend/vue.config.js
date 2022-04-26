@@ -1,11 +1,12 @@
 
-//const defineConfig = require('@vue/cli-service')
+const pages = {
+  "main": { "entry": "./src/main.js" },
+  "load":{ "entry": "./src/load.js" }
+};
 
 module.exports = {
 
-  pages: {
-    "main": { "entry": "./src/main.js", "template": "./main.html" }
-  },
+  pages: pages,
 
   filenameHashing: false,
   outputDir: "/static/dist",
@@ -21,13 +22,12 @@ module.exports = {
     };
 
   },
-
-
-
   chainWebpack: config => {
     config.devtool = 'source-map';
-    config.plugins.delete('html');
-    config.plugins.delete('preload');
-    config.plugins.delete('prefetch');
+    Object.keys(pages).forEach(page => {
+      config.plugins.delete(`html-${page}`);
+      config.plugins.delete(`preload-${page}`);
+      config.plugins.delete(`prefetch-${page}`);
+    });
   }
 };

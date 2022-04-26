@@ -1,6 +1,5 @@
 import sys
 import uvicorn
-from router import Router
 
 if __name__ == '__main__':
     reload = False
@@ -16,7 +15,5 @@ if __name__ == '__main__':
 
     print("Port = {}, Mode = {}".format(port,mode))
 
-    reload = True if mode == "development" else False
-    r = Router()
-        
-    uvicorn.run(r, host="0.0.0.0", port=8001, log_level="info", lifespan="off", reload=reload, port=port )
+    reload = True if mode == "development" else False        
+    uvicorn.run("router:ROUTER", host="0.0.0.0", log_level="info", lifespan="off", reload=reload, port=port )

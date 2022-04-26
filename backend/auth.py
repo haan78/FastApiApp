@@ -9,11 +9,11 @@ def AUTH(prj:Project)->APIRouter:
     auth = APIRouter(prefix="/auth")
     @auth.get("/login",response_class=HTMLResponse)
     def login():
-        return FastLib.template("templates/login.html",{ "status":"" })
+        return FastLib.template("login.html",{ "status":"" })
     
     @auth.get("/login/{status}",response_class=HTMLResponse)
     def login(status:str):
-        return FastLib.template("templates/login.html",{ "status":status })
+        return FastLib.template("login.html",{ "status":status })
 
     @auth.get("/logout",response_class=HTMLResponse)
     def logout(request:Request):        

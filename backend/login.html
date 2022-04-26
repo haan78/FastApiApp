@@ -11,14 +11,13 @@
 
 <body>
     <div id="formlogin">
-        <p class="titlep">            
+        <div class="title">
             <img src="/static/logo.png" />
-            <span>Title</span>
-        </p>
+            <div>Title</div>
+        </div>
         <fieldset>
             <legend>Login</legend>
             <form action="/auth/form" method="POST">
-                <input type="hidden" value="{{ status }}" />
                 <label for="identitiy">Identitiy</label><br />
                 <input name="identitiy" id="identitiy" type="text" placeholder="Identitiy" /><br />
                 <label for="password">Password</label><br />
@@ -26,13 +25,22 @@
                 <button type="submit">ENTER</button>
             </form>
             <div id="_message">
-                <div id="_need" style="color: lightgreen;">Pleae login</div>
-                <div id="_bye" style="color: lightgreen;">Googbye</div>
-                <div id="_captcha" style="color: brown;">Captcha did not match</div>
-                <div id="_wrong" style="color: brown;">Wrong password or user name</div>
-                <div id="_default" style="color: lightgreen;">Welcome</div>
+                <div id="_need" class="success">Pleae login</div>
+                <div id="_bye" class="success">Googbye</div>
+                <div id="_captcha" class="error">Captcha did not match</div>
+                <div id="_wrong" class="error">Wrong password or user name</div>
+                <div id="_login" class="success">Welcome</div>
             </div>
             <style>
+                :root {
+                    --main-color-from : rgb(3, 65, 17);
+                    --main-color-to : rgb(34, 243, 121);
+                    --error-color: brown;
+                    --success-color: lightgreen;
+                    --label-color: black;
+                    --height-title: 3em;
+                }
+                
                 * {
                     -webkit-box-sizing: border-box;
                     -moz-box-sizing: border-box;
@@ -42,13 +50,13 @@
                 body {
                     margin: 0;
                     padding: 0;
-                    background-color: rgb(1, 20, 1);
+                    background-color: var(--main-color-from);
+                    font-family: Verdana, Geneva, Tahoma, sans-serif;
                 }
 
                 #formlogin {
-                    font-family:'Verdana, Geneva, Tahoma, sans-serif';
-                    color: darkblue;
-                    background-image: linear-gradient(to bottom right, rgb(3, 65, 17), rgb(34, 243, 121));
+                    color: var(--label-color);
+                    background-image: linear-gradient(to bottom right,var(--main-color-from),var(--main-color-to));
                     border-radius: 25px;
                     width: 20em;
                     max-width: auto;
@@ -58,27 +66,29 @@
                     top: 20%;
                     transform: translate(-50%, -20%);
                     border: 2px solid rgb(1, 20, 1);
-                    box-shadow: rgb(10, 248, 101) 0px 20px 30px -10px;
+                    box-shadow: 1em 1em 2em 0em var(--main-color-to);
                 }
 
-                #formlogin > .titlep {
+                #formlogin>.title {
+                    vertical-align: middle;
+                    height: var(--height-title);
+                    margin-bottom: 1em;
+                    font-size: large;
+                }
+
+                #formlogin>.title>div {
+                    padding-left: 0.5em;
+                    display: inline-block;
+                    vertical-align: middle;
+                    height: 100%;
+                    width: auto;
+                }
+
+                #formlogin>.title>div>img {
+                    margin-right: 1em;
                     vertical-align: middle;
                 }
 
-                #formlogin > .titlep > img {
-                    vertical-align: middle;
-                    display:inline-block;
-                    width: 3em;
-                    height: 3em;
-                    border: 0px solid black;
-                }
-
-                #formlogin > .titlep > span {
-                    display:inline-block;                    
-                    font-weight: bolder;
-                    font-size: x-large;
-                    color: darkblue;
-                }
 
                 #formlogin>fieldset {
                     width: 100%;
@@ -93,13 +103,22 @@
 
                 #formlogin>fieldset>#_message {
                     color: rgb(45, 46, 3);
-                    font-size: large;
                     font-weight: bold;
                     margin-top: 1em;                    
                 }
 
                 #formlogin>fieldset>#_message>div {
                     display: none;
+                    font-weight: bold;
+                    text-align: center;
+                }
+
+                #formlogin>fieldset>#_message>.error {
+                    color: var(--error-color);
+                }
+
+                #formlogin>fieldset>#_message>.success {
+                    color: var(--success-color);
                 }
 
                 #formlogin>fieldset>form>input {
@@ -109,7 +128,7 @@
 
                 #formlogin>fieldset>form>button {
                     width: 100%;
-                    background-color: rgb(9, 58, 58);
+                    background-color: var(--main-color-from);
                     color: silver;
                     height: 2em;
                     border: none;
@@ -117,12 +136,12 @@
             </style>
             <script>
                 window.addEventListener("load", function () {
-                    status = document.querySelector("#formlogin > fieldset > form > input[type=hidden]").value;
-                    if ( !status || status =="" ) {
-                        status = "default"
-                    }
+                    var status = window.location.pathname.split("/").slice(-1)[0].trim();
+                    status = status ? status : "login";                    
                     div = document.querySelector("#formlogin > fieldset > #_message > #_"+status);
-                    div.style.display = "block";
+                    if ( div ) {
+                        div.style.display = "block";
+                    }                    
                 });
             </script>
         </fieldset>

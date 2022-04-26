@@ -1,5 +1,5 @@
 FROM python:3.11.0a3-alpine3.15 AS build
-ARG POTR = 8001
+ARG POTR=8001
 ENV TZ=Turkey
 RUN apk add openssl
 COPY ./backend /backend
@@ -12,12 +12,12 @@ EXPOSE $PORT
 
 FROM build AS development
 COPY ./env-development.env /etc/app.env
-ENTRYPOINT python development $PORT
+ENTRYPOINT python run.py development $PORT
 
 FROM build AS staging
 COPY ./env-staging.env /etc/app.env
-ENTRYPOINT python staging $PORT
+ENTRYPOINT python run.py staging $PORT
 
 FROM build AS production
 COPY ./env-production.env /etc/app.env
-ENTRYPOINT python production $PORT
+ENTRYPOINT python run.py production $PORT
