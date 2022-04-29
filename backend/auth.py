@@ -1,19 +1,22 @@
 from project import Project
 from fastapi import Request, APIRouter,Form
 from fastapi.responses import HTMLResponse,RedirectResponse
-from lib.FastLib import FastLib
+from lib.FastBaris import FastBarisHTMLResponse,FastBarisFileContent,FastBarisJWTRead
 from project import Project
 
 def AUTH(prj:Project)->APIRouter:
 
+    def loginpage():
+        return FastBarisHTMLResponse( content=FastBarisFileContent("login.html") )
+
     auth = APIRouter(prefix="/auth")
     @auth.get("/login",response_class=HTMLResponse)
     def login():
-        return FastLib.template("login.html",{ "status":"" })
+        return loginpage()
     
     @auth.get("/login/{status}",response_class=HTMLResponse)
     def login(status:str):
-        return FastLib.template("login.html",{ "status":status })
+        return loginpage()
 
     @auth.get("/logout",response_class=HTMLResponse)
     def logout(request:Request):        
@@ -28,9 +31,5 @@ def AUTH(prj:Project)->APIRouter:
         else:
             return RedirectResponse("/auth/login/wrong",status_code=302)
         
-
-    @auth.get("/jwt/{ token }",response_class=RedirectResponse)
-    async def jwt(token:str):
-        pass
 
     return auth

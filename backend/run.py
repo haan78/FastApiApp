@@ -15,5 +15,6 @@ if __name__ == '__main__':
 
     print("Port = {}, Mode = {}".format(port,mode))
 
-    reload = True if mode == "development" else False        
-    uvicorn.run("router:ROUTER", host="0.0.0.0", log_level="info", lifespan="off", reload=reload, port=port )
+    reload = True if mode == "development" else False
+    level:str = "warning" if mode == "production" else "info"
+    uvicorn.run("router:ROUTER", host="0.0.0.0", log_level=level, lifespan="off", reload=reload, port=port )

@@ -11,7 +11,8 @@ class Project:
     settings:dict = {
         "DBCONN":None,
         "DBNAME":None,
-        "SESSIONTIME":None
+        "SESSIONTIME":None,
+        "JWTKEY":None
     }
 
     def __init__(self,envfile = ".env") -> None:

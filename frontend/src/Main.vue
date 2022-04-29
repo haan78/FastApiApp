@@ -28,7 +28,7 @@ export default {
     }
   },
   created() {    
-    var cl = this.$subutai.cookie.get("BEDATA",{ json64:true });
+    var cl = this.$subutai.cookie.get("DATA64",{ json64:true });
     console.log( cl );
     
   }

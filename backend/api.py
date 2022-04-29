@@ -1,19 +1,21 @@
+from typing import Callable
 from project import Project
 from fastapi import Request, APIRouter, HTTPException
-from lib.FastApiBarisJSONRoute import FastApiBarisJSONRoute
-
+from lib.FastBaris import FastBarisJSONRoute,FastBarisJWTRead
 from lib.Mongo import Mongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 def API(prj:Project) -> APIRouter:
-    class ApiRouterControler(FastApiBarisJSONRoute):
-        def auth(self, request: Request):
-            super().auth(request)
-            # raise Exception("You Shall not pass")
 
+    @FastBarisJSONRoute.auth()
+    def auth(request:Request,abort:Callable):
+        ##abort("Auth Error2")
+        pass
+        
+        
 
-    apirouter = APIRouter(prefix="/api", route_class=ApiRouterControler)
+    apirouter = APIRouter(prefix="/api", route_class=FastBarisJSONRoute)
 
     @apirouter.get("/")
     def test2():

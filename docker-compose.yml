@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: dockerfile_fastapi
       target: development
-    restart: on-failure
+    restart: always
     ports:
       - "8001:8001"
     volumes:
