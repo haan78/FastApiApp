@@ -1,5 +1,5 @@
 #!/bin/sh
-cdir=$(pwd)
+cdir=.
 dist=$cdir/static/dist
 image=fastapi/imagename
 npmimg=fastapi/npm
@@ -30,18 +30,26 @@ fi
 docker run -ti -v $cdir/static:/static:consistent $npmid $cdir
 if [ -d "$dist" ]
 then
-    rm -rf $dist/*.html
     docker build -f $cdir/dockerfile_fastapi --target $taget -t $image $cdir
     appid=$(docker images -q $image)
     if [ ! -z "$appid" ]
     then        
         echo "Image Name = $image, Image ID = $appid"
-        exit 0
+        cat docker.hub.txt | docker login -u haan78 --password-stdin
+        docker image tag $image:latest haan78/baris:$image
+        dhash=$(docker image push -q haan78/baris:$image)
+        docker logout
+        if [ ! -z "$dhash" ]
+        then
+            echo "image is ready"
+            exit 0
+        else
+            echo "Image upload error"
+        fi
     else
         echo "Application image can't create"
-        exit 1
     fi
 else
-    echo "Dist folder can't create"
-    exit 1
+    echo "Dist folder can't create"    
 fi
+exit 1

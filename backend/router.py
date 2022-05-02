@@ -9,7 +9,7 @@ from api import API
 from auth import AUTH
 
 def CreateRouter():
-    prj = Project("/etc/app.env")
+    prj:Project = Project()
     app = FastAPI()
     app.mount("/static", StaticFiles(directory="/static"), name="static")
     
@@ -33,4 +33,6 @@ def CreateRouter():
 
     return app
 
-ROUTER=CreateRouter()
+
+ROUTER = CreateRouter()
+
