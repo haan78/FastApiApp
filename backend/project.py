@@ -1,44 +1,31 @@
-from dataclasses import dataclass
+#from dataclasses import dataclass
+#from mimetypes import init
 from lib.Mongo import Mongo
+from lib.ENV import ENV
 from FastSession.FastMongoSession import FastMongoSession
-import os
 
 class Project:
     _mongo:Mongo  = None
     _session:FastMongoSession = None
-    
-    settings_:dict = {
-        "DBCONN":None,
-        "DBNAME":None,
-        "SESSIONTIME":None,
-        "JWTKEY":None
-    }
 
-    @dataclass
     class SettingData:
-        DBCONN:str = None
-        DBNAME:str = None
-        SESSIONTIME:int = 600
-        JWTKEY:str = None
+        DBCONN:str
+        DBNAME:str
+        SESSIONTIME:int
+        JWTKEY:str
+
+        def __init__(self) -> None:
+            self.DBCONN:str = ENV("DBCONN",str)
+            self.DBNAME:str = ENV("DBNAME",str)
+            self.SESSIONTIME:int = ENV("SESSIONTIME",int,False,500)
+            self.JWTKEY:str = ENV("JWTKEY",str)
+
 
     settings:SettingData = None
 
 
     def __init__(self) -> None:
         self.settings = self.SettingData()
-        for k in self.settings.__annotations__:
-            
-            v = os.getenv(k)
-            t = self.settings.__annotations__[k]
-            ##print(k,v,t)
-            if v is None:
-                raise Exception('ENV '+k+" dose not exist")
-            elif t is int:
-                self.settings.__setattr__(k,int(v))
-            elif t is bool:
-                self.settings.__setattr__(k,bool(v))
-            else:
-                self.settings.__setattr__(k,str(v)) 
                 
     
     def Mongo(self,reload:bool = False)->Mongo:

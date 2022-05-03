@@ -1,10 +1,11 @@
-from project import Project
+
 from fastapi import Request, APIRouter,Form
 from fastapi.responses import HTMLResponse,RedirectResponse
 from lib.FastBaris import FastBarisHTMLResponse,FastBarisFileContent,FastBarisJWTRead
-from project import Project
+from FastSession.FastSessionAbstract import FastSessionAbstract
+from dbhelper import DBHelper
 
-def AUTH(prj:Project)->APIRouter:
+def AUTH(session:FastSessionAbstract,db:DBHelper)->APIRouter:
 
     def loginpage():
         return FastBarisHTMLResponse( content=FastBarisFileContent("login.html") )
@@ -20,12 +21,12 @@ def AUTH(prj:Project)->APIRouter:
 
     @auth.get("/logout",response_class=HTMLResponse)
     def logout(request:Request):        
-        return prj.Session().killAndRedirect("/auth/login/bye",request)
+        return session.killAndRedirect("/auth/login/bye",request)
 
     @auth.post("/form",response_class=RedirectResponse)
     async def form(identitiy:str = Form("Ali"),password:str = Form("Veli")):        
         if identitiy == "user" and password == "12345":            
-            return prj.Session().writeAndRedirect("/",{
+            return session.writeAndRedirect("/",{
                 "identitiy":"user"
             })            
         else:

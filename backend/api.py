@@ -1,12 +1,11 @@
 from typing import Callable
-from project import Project
 from fastapi import Request, APIRouter, HTTPException
 from lib.FastBaris import FastBarisJSONRoute,FastBarisJWTRead
-from lib.Mongo import Mongo
-from pymongo import MongoClient
 from bson.objectid import ObjectId
+from FastSession.FastSessionAbstract import FastSessionAbstract
+from dbhelper import DBHelper
 
-def API(prj:Project) -> APIRouter:
+def API(session:FastSessionAbstract,db:DBHelper) -> APIRouter:
 
     @FastBarisJSONRoute.auth()
     def auth(request:Request,abort:Callable):
@@ -27,18 +26,16 @@ def API(prj:Project) -> APIRouter:
 
     @apirouter.get("/hata2")
     def hata2():
-        raise HTTPException(status_code=422, detail="Hadi canım")
+        raise HTTPException(status_code=422, detail="Hadi canim")
 
     @apirouter.get("/db1")
     def db1():
-        m:Mongo = Mongo("mongodb://root:12345@mongodb","dojo")
-        mc:MongoClient = m.link()
-        cur = mc.get_database("dojo").get_collection("gelirgider").find({
+        cur = db.mongo.db().get_collection("gelirgider").find({
             "_id":ObjectId("61caf5285451957d2c688849")
         })
         
-        v = m.toList(cur)
-        print(v)
+        v = db.mongo.toList(cur)
+        #print(v)
 
         return v
 

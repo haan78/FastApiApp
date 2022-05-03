@@ -24,6 +24,7 @@ class Mongo():
     def link(self, new:bool = False) -> MongoClient:
         if new or self._conn is None:
             self._conn = MongoClient(self._connstr)
+        
         return self._conn
 
     def db(self,dbname: str = None) -> Database:

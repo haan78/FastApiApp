@@ -1,7 +1,8 @@
 from curses import echo
 import sys
 import uvicorn
-from db import initdb
+from settings import Settings
+from dbhelper import DBHelper
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -27,7 +28,10 @@ if __name__ == '__main__':
         exit(1)
 
     try:
-        initdb()
+        DBHelper.initdb(Settings())
+    except Exception as ex:
+        print("Database installing error / "+str(ex))
+        exit(1)
     except:
         print("Database installing error")
         exit(1)

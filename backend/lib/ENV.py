@@ -1,13 +1,12 @@
-
 from datetime import datetime
 from dateutil import parser
 import os
 from typing import Any, Type
 
-def ENVVal(name:str,type:Type,requierd:bool = True,default=None)->Any:
+def ENV(name:str,type:Type,required:bool = True,default=None)->Any:
     v = os.getenv(name)
     if v is None:
-        if requierd == True:
+        if required == True:
             raise Exception("ENV variable is required")
         else:
             return default
@@ -23,4 +22,3 @@ def ENVVal(name:str,type:Type,requierd:bool = True,default=None)->Any:
         return parser(v)
     else:
         raise Exception("Unsupported ENV type")
-
