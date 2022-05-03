@@ -4,8 +4,9 @@ from lib.FastBaris import FastBarisJSONRoute,FastBarisJWTRead
 from bson.objectid import ObjectId
 from FastSession.FastSessionAbstract import FastSessionAbstract
 from dbhelper import DBHelper
+from settings import Settings
 
-def API(session:FastSessionAbstract,db:DBHelper) -> APIRouter:
+def API(sett:Settings) -> APIRouter:
 
     @FastBarisJSONRoute.auth()
     def auth(request:Request,abort:Callable):
@@ -27,16 +28,5 @@ def API(session:FastSessionAbstract,db:DBHelper) -> APIRouter:
     @apirouter.get("/hata2")
     def hata2():
         raise HTTPException(status_code=422, detail="Hadi canim")
-
-    @apirouter.get("/db1")
-    def db1():
-        cur = db.mongo.db().get_collection("gelirgider").find({
-            "_id":ObjectId("61caf5285451957d2c688849")
-        })
-        
-        v = db.mongo.toList(cur)
-        #print(v)
-
-        return v
 
     return apirouter

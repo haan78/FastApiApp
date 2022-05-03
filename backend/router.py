@@ -14,13 +14,11 @@ from auth import AUTH
 def CreateRouter():
     sett:Settings = Settings() 
     app = FastAPI()
-    db:DBHelper = DBHelper(sett)
-    session:FastSessionAbstract = db.createSession()
 
     app.mount("/static", StaticFiles(directory="/static"), name="static")
     
     def main2(request:Request):
-        s = session.read(request=request)
+        s = DBHelper(sett).createSession().read(request=request)
         if s is not None:
             return FastBarisHTMLResponse(baseData=FastBarisBaseData(data=s),content=FastBarisFileContent("template.html"))
         else:
@@ -34,8 +32,8 @@ def CreateRouter():
     def main(request:Request):
         return main2(request=request)
 
-    app.include_router(AUTH(session,db))
-    app.include_router(API(session,db))
+    app.include_router(AUTH(sett))
+    app.include_router(API(sett))
 
     return app
 
