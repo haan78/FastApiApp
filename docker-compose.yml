@@ -20,7 +20,7 @@ services:
     restart: on-failure
     volumes:
       - "./frontend/src:/frontend/src:ro"
-      - "./frontend/vue.config.js:/frontend/vue.config.js:ro"
+      - "./frontend/vite.config.js:/frontend/vite.config.js:ro"
       - "npm_node_modules:/frontend/node_modules:rw"
       - "./static:/static:rw"
 

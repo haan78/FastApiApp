@@ -1,13 +1,7 @@
-import { createApp } from 'vue';
-import ElementPlus from 'element-plus';
-import locale from 'element-plus/lib/locale/lang/tr';
-import subutai from './lib/SubutaiVue';
+import App from './App.svelte'
 
-import comp from './Main.vue';
+const app = new App({
+  target: document.getElementById('app')
+})
 
-let app = document.getElementById("app");
-app.innerHTML = "";
-createApp(comp).use(ElementPlus, { locale }).use(subutai).mount(app);
-//createApp(comp).use(subutai).mount(app);
-//console.log(window.document.cookie);
-//console.log(typeof window.document.cookie);
+export default app

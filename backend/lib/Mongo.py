@@ -11,15 +11,13 @@ from dateutil import parser
 
 class Mongo():
     _connstr: str = None
-    _dbname: str = None
     _conn: MongoClient = None
     _cursorFnc: Callable = None
     TIMESTAMPFORMAT : str = "%Y-%m-%dT%H:%M:%S.000Z"
     DATEFORMAT : str = "%Y-%m-%dT00:00:00.000Z"
 
-    def __init__(self,connstr: str, dbname: str):
+    def __init__(self,connstr: str):
         self._connstr = connstr
-        self._dbname = dbname
 
     def link(self, new:bool = False) -> MongoClient:
         if new or self._conn is None:
@@ -29,7 +27,7 @@ class Mongo():
 
     def db(self,dbname: str = None) -> Database:
         if dbname is None:
-            return self.link().get_database(self._dbname)
+            return self.link().get_database()
         else:
             return self.link().get_database(self,dbname)
     

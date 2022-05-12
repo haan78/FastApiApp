@@ -1,45 +1,23 @@
 {
-  "name": "yazicivue",
-  "version": "0.1.0",
+  "name": "svelte1",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "development": "vue-cli-service build --mode development --watch",
-    "staging": "vue-cli-service build --mode development",
-    "production": "vue-cli-service build --mode production"
-  },
-  "dependencies": {
-    "core-js": "^3.6.5",
-    "element-plus": "^2.0.1",
-    "vue": "^3.0.0",
-    "vue-router": "^4.0.12",
-    "vuex": "^4.0.2"
+    "development": "vite build --mode development --watch",
+    "staging": "vite build --mode development",
+    "production": "vite build --mode production"    
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0"
+    
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
+    "date-picker-svelte": "^2.0.0",
+    "svelte": "^3.44.0",
+    "svelte-feathers": "^0.1.15",
+    "vite": "^2.9.7"
   },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+  "dependencies": {
+    "glob": "^7.2.0",
+    "svelte-spa-router": "^3.2.0"
+  }
 }
