@@ -1,7 +1,7 @@
 from fastapi import FastAPI,Request
 from fastapi.responses import HTMLResponse,RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from FastSession.FastSessionAbstract import FastSessionAbstract
+from FastSession.FastSqLiteSession import FastSqLiteSession
 from lib.FastBaris import FastBarisFileContent,FastBarisHTMLResponse,FastBarisBaseData
 
 
@@ -14,11 +14,12 @@ from auth import AUTH
 def CreateRouter():
     sett:Settings = Settings() 
     app = FastAPI()
+    session:FastSqLiteSession = FastSqLiteSession("/tmp/session.db")
 
-    app.mount("/static", StaticFiles(directory="/static"), name="static")
+    app.mount("/static", StaticFiles(directory="/app/static"), name="static")
     
     def main2(request:Request):
-        s = DBHelper(sett).createSession().read(request=request)
+        s = session.read(request=request)
         if s is not None:
             return FastBarisHTMLResponse(baseData=FastBarisBaseData(data=s),content=FastBarisFileContent("template.html"))
         else:
@@ -32,8 +33,8 @@ def CreateRouter():
     def main(request:Request):
         return main2(request=request)
 
-    app.include_router(AUTH(sett))
-    app.include_router(API(sett))
+    app.include_router(AUTH(sett,session))
+    app.include_router(API(sett,session))
 
     return app
 
