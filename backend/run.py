@@ -2,8 +2,18 @@ from curses import echo
 import uvicorn
 from settings import Settings
 from dbhelper import DBHelper
+from dotenv import load_dotenv
+from pathlib import Path
 
 if __name__ == '__main__':
+
+    envf:str = "/app/.env"
+    try:
+        load_dotenv(dotenv_path=Path(envf))
+    except:
+        print("Application {} file can`t load".format(envf))
+        exit(1)
+
     sett = Settings()
     try:
         DBHelper.initdb(sett)

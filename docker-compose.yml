@@ -5,9 +5,9 @@ services:
     build:
       context: .
       dockerfile: DockerPy
-    env_file: 
-      - ./config/version.env
-      - ./config/hidden/development.env
+      args:
+        - MODE=development
+        - VERSION=0.01/Alpha
     restart: always
     ports:
       - "8001:8001"
