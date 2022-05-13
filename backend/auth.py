@@ -9,7 +9,9 @@ from dbhelper import DBHelper
 def AUTH(sett:Settings,session:FastSessionAbstract)->APIRouter:
 
     def loginpage():
-        return FastBarisHTMLResponse( content=FastBarisFileContent("login.html") )
+        print("login")
+        info:str = "{} ({})".format(sett.VERSION,sett.APPMODE)
+        return FastBarisHTMLResponse( content=FastBarisFileContent("login.html",replace={ "info":info }) )
 
     auth = APIRouter(prefix="/auth")
     @auth.get("/login",response_class=HTMLResponse)

@@ -1,19 +1,48 @@
 version: "3.8"
 
 services:
-  app:
+  py:
     build:
       context: .
-      target: development
+      dockerfile: DockerPy
+    env_file: 
+      - ./config/version.env
+      - ./config/hidden/development.env
     restart: always
     ports:
       - "8001:8001"
     volumes:
-      - "./backend:/app/backend:consistent"
       - "./static:/app/static:consistent"
-      - "./frontend/src:/app/frontend/src:ro"
-      - "./frontend/vite.config.js:/app/frontend/vite.config.js:ro"
-      - "node_modules:/app/frontend/node_modules:rw"
+      - "./backend:/app/backend:consistent"      
+
+  npm:
+    build: 
+      context: .
+      dockerfile: DockerNpm
+    environment:
+      - SCRIPT=development
+    restart: on-failure
+    volumes:
+      - ./static:/app/static:consistent
+      - ./frontend/src:/app/frontend/src:ro
+      - ./frontend/vite.config.js:/app/frontend/vite.config.js:ro
+      - node_modules:/app/frontend/node_modules:rw
+
+
+  # mongodb:
+  #   image: mongo:5.0.3
+  #   environment:
+  #     TZ: "Asia/Istanbul"
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: 12345
+  #   ports:
+  #     - 27017:27017
+  #   expose:
+  #     - "27017"
+  #   volumes:
+  #     - ./config/mongotool.sh:/archives/mongotool.sh
+  #     - ./config/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+  #     - mongodata:/data/db  
 
 volumes:
   mongodata:
