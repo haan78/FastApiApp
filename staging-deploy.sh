@@ -1,7 +1,6 @@
 #!/bin/sh
 
 #gerekli tanimlamalar
-version="1.0/Alpa"
 imagename="projeadi"
 dockerhubserver=""
 dockeruser="haan78"
@@ -10,6 +9,7 @@ dockercluster="baris"
 npmimg="$imageadi/npm"
 #mevcut klasor
 cdir=$(pwd)
+version=$(cat "$cdir/version.txt")
 
 #frontendi compile etmek icin npm i olustur
 docker build -f $cdir/DockerNpm -t $npmimg $cdir
