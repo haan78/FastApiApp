@@ -6,8 +6,8 @@ dockerhubserver=""
 dockeruser=$1
 dockeraccesstoken=$2
 dockercluster=$3
-mode=staging
-
+mode=testdrive
+scritp=staging
 npmimg="$imagename/npm"
 #mevcut klasor
 cdir=$(pwd)
@@ -45,7 +45,7 @@ fi
 rm -rf /static/dist
 
 #npm'i run et ve dist klasorunu tekrar olustur
-docker run -v $cdir/static:/app/static:rw --env SCRIPT=$mode $npmid $cdir
+docker run -v $cdir/static:/app/static:rw --env SCRIPT=$scritp $npmid $cdir
 
 if [ ! -d "$cdir/static/dist" ]
 then

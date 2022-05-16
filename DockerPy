@@ -11,7 +11,7 @@ RUN pip install --upgrade pip\
     pip install --no-cache-dir -r /app/piplist.txt
     
 COPY ./config/hidden/${MODE}.env /app/.env
-RUN echo -e "\nVERSION=${VERSION}\nAPPMODE=${MODE}" >> /app/.env
+RUN echo -e "\nVERSION=${VERSION}\nAPPMODE=${MODE}\nREBUILD=TESTDIRIVE" >> /app/.env
 RUN cat /app/.env
 
 COPY ./backend /app/backend
