@@ -12,7 +12,7 @@ class DBHelper:
 
     def __init__(self,sett:Settings) -> None:
         self.settings = sett
-        self.mongo = Mongo(self.settings.DBCONN,self.settings.DBNAME)
+        self.mongo = Mongo(self.settings.DBCONN)
         print(self.mongo)
 
     def createSession(self)->FastMongoSession:

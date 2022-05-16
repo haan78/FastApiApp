@@ -1,3 +1,4 @@
+from xml.etree.ElementTree import VERSION
 from lib.ENV import ENV
 import logging
 import time
@@ -15,12 +16,16 @@ def applogger(name:str)->logging.Logger:
 
 class Settings:
     DBCONN: str
-    DBNAME: str
     SESSIONTIME: int
     JWTKEY: str
+    APPMODE: str
+    PORT:int
+    VERSION:str
 
     def __init__(self) -> None:
-        self.DBCONN: str = ENV("DBCONN", str)
-        self.DBNAME: str = ENV("DBNAME", str)
+        self.DBCONN: str = ENV("DBCONN", str)        
         self.SESSIONTIME: int = ENV("SESSIONTIME", int, False, 500)
         self.JWTKEY: str = ENV("JWTKEY", str)
+        self.APPMODE:str = ENV("APPMODE",str,False,"NONE")
+        self.PORT:int = ENV("PORT",int,False,8001)
+        self.VERSION:str = ENV("VERSION",str,True)

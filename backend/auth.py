@@ -6,10 +6,12 @@ from FastSession.FastSessionAbstract import FastSessionAbstract
 from settings import Settings
 from dbhelper import DBHelper
 
-def AUTH(sett:Settings)->APIRouter:
+def AUTH(sett:Settings,session:FastSessionAbstract)->APIRouter:
 
     def loginpage():
-        return FastBarisHTMLResponse( content=FastBarisFileContent("login.html") )
+        print("login")
+        info:str = "{} ({})".format(sett.VERSION,sett.APPMODE)
+        return FastBarisHTMLResponse( content=FastBarisFileContent("login.html",replace={ "info":info }) )
 
     auth = APIRouter(prefix="/auth")
     @auth.get("/login",response_class=HTMLResponse)
@@ -22,12 +24,12 @@ def AUTH(sett:Settings)->APIRouter:
 
     @auth.get("/logout",response_class=HTMLResponse)
     def logout(request:Request):        
-        return DBHelper(sett).createSession().killAndRedirect("/auth/login/bye",request)
+        return session.killAndRedirect("/auth/login/bye",request)
 
     @auth.post("/form",response_class=RedirectResponse)
     async def form(identitiy:str = Form("Ali"),password:str = Form("Veli")):        
         if identitiy == "user" and password == "12345":            
-            return DBHelper(sett).createSession().writeAndRedirect("/",{
+            return session.writeAndRedirect("/",{
                 "identitiy":"user"
             })            
         else:

@@ -6,7 +6,7 @@ from FastSession.FastSessionAbstract import FastSessionAbstract
 from dbhelper import DBHelper
 from settings import Settings
 
-def API(sett:Settings) -> APIRouter:
+def API(sett:Settings,session:FastSessionAbstract) -> APIRouter:
 
     @FastBarisJSONRoute.auth()
     def auth(request:Request,abort:Callable):

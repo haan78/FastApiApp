@@ -1,0 +1,10 @@
+FROM node:17.8-alpine3.14
+ENV TZ=Turkey
+ENV SCRIPT=production
+ENV NODE_OPTIONS=--openssl-legacy-provider
+COPY ./frontend /app/frontend
+WORKDIR /app/frontend
+RUN npm install
+#ENTRYPOINT top
+ENTRYPOINT npm run ${SCRIPT}
+

@@ -10,7 +10,9 @@
 </head>
 
 <body>
+    <div class="info_div"><span>Version:{{ info }}</span></div>
     <div id="formlogin">
+        
         <div class="title">
             <img src="/static/logo.png" />
             <div>Title</div>
@@ -52,6 +54,14 @@
                     padding: 0;
                     background-color: var(--main-color-from);
                     font-family: Verdana, Geneva, Tahoma, sans-serif;
+                }
+
+                .info_div {
+                    color: var(--main-color-to);
+                    text-align: right;
+                    padding-right: 3px;
+                    font-size: x-small;
+                    opacity: 0.5;
                 }
 
                 #formlogin {

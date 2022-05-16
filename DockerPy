@@ -1,0 +1,21 @@
+FROM python:3.11.0a3-alpine3.15
+ARG MODE=production
+ARG VERSION=0.0/Alpha
+ENV TZ=Turkey
+RUN apk update \
+    apk upgrade 
+
+COPY ./config/piplist.txt /app/piplist.txt
+
+RUN pip install --upgrade pip\
+    pip install --no-cache-dir -r /app/piplist.txt
+    
+COPY ./config/hidden/${MODE}.env /app/.env
+RUN echo -e "\nVERSION=${VERSION}\nAPPMODE=${MODE}" >> /app/.env
+RUN cat /app/.env
+
+COPY ./backend /app/backend
+COPY ./static /app/static
+WORKDIR /app/backend
+ENTRYPOINT python run.py
+#ENTRYPOINT top
