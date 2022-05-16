@@ -53,6 +53,7 @@ echo $dockeraccesstoken | docker login -u $dockeruser --password-stdin $dockerhu
 docker image tag $imagename:latest $dockeruser/$dockercluster:$imagename
 dhash=$(docker image push -q $dockeruser/$dockercluster:$imagename)
 docker logout
+docker image rm $imagename
 
 if [ -z "$dhash" ]
 then
