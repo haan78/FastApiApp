@@ -11,7 +11,13 @@ npmimg="$imagename/npm"
 #mevcut klasor
 cdir=$(pwd)
 version=$(cat $cdir/version.txt)
-dockeraccesstoken=$(cat $cdir/config/hidden/docker_hub_token.txt)
+#dockeraccesstoken=$(cat $cdir/config/hidden/docker_hub_token.txt)
+dockeraccesstoken=$1
+if [ -z "$dockeraccesstoken" ]
+then
+    echo "AT alinamdi"
+    exit 1
+fi
 
 #frontendi compile etmek icin npm i olustur
 docker build -f $cdir/DockerNpm -t $npmimg $cdir
