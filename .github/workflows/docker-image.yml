@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Override ENV file
-      width: 
+      with: 
         EFDATA: ${{ secrets.ENV_FILE_STAGING }}
       env: 
         EFDATA: ${{ secrets.ENV_FILE_STAGING }}
