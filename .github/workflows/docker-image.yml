@@ -14,5 +14,6 @@ jobs:
       run: |
         touch ./config/hidden/testdrive.env
         echo ${{ secrets.ENV_FILE_STAGING }} > ./config/hidden/testdrive.env
-    - name: Build the Docker image
-      run: sh hub.sh haan78 ${{ secrets.DOCKER_HUB_AT }} baris
+        cat ./config/hidden/testdrive.env
+    # - name: Build the Docker image
+    #   run: sh hub.sh haan78 ${{ secrets.DOCKER_HUB_AT }} baris
