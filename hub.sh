@@ -3,8 +3,9 @@
 #gerekli tanimlamalar
 imagename="fasvelte1"
 dockerhubserver=""
-dockeruser="haan78"
-dockercluster="baris"
+dockeruser=$1
+dockeraccesstoken=$2
+dockercluster=$3
 mode=staging
 
 npmimg="$imagename/npm"
@@ -12,10 +13,17 @@ npmimg="$imagename/npm"
 cdir=$(pwd)
 version=$(cat $cdir/version.txt)
 #dockeraccesstoken=$(cat $cdir/config/hidden/docker_hub_token.txt)
-dockeraccesstoken=$1
-if [ -z "$dockeraccesstoken" ]
+
+if [ -z "$dockeruser" ]
 then
-    echo "AT alinamdi"
+    echo "Docker Hub user is empty"
+    exit 1
+elif [ -z "$dockeraccesstoken" ]
+then
+    echo "Docker Hub AT is empty"
+    exit 1
+elif [ -z "$dockercluster" ]
+    echo "Docker Hub cluster is empty"
     exit 1
 fi
 
