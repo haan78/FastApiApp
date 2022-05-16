@@ -8,15 +8,17 @@ dockeraccesstoken=$2
 dockercluster=$3
 mode=testdrive
 scritp=staging
+
+nevfile=$cdir/config/hidden/$mode.env
 npmimg="$imagename/npm"
 #mevcut klasor
 cdir=$(pwd)
 version=$(cat $cdir/version.txt)
 #dockeraccesstoken=$(cat $cdir/config/hidden/docker_hub_token.txt)
 
-if [ ! -f "$cdir/config/hidden/$mode.env" ]
+if [ ! -f "$nevfile" -o ! -s "$nevfile" ]
 then
-    echo "ENV file not found"
+    echo "ENV file not found or empty"
     exit 1
 elif [ -z "$dockeruser" ]
 then
