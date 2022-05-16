@@ -11,6 +11,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Override ENV file
-      run: echo ${{ secrets.ENV_FILE_STAGING }} > ./config/hidden/staging.env
+      env:
+        DOCKER_HUB_AT:
+      run: |
+        touch ./config/hidden/staging.env
+        echo ${{ secrets.ENV_FILE_STAGING }} > ./config/hidden/staging.env
     - name: Build the Docker image
       run: sh hub.sh haan78 ${{ secrets.DOCKER_HUB_AT }} baris

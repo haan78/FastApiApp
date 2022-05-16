@@ -14,7 +14,11 @@ cdir=$(pwd)
 version=$(cat $cdir/version.txt)
 #dockeraccesstoken=$(cat $cdir/config/hidden/docker_hub_token.txt)
 
-if [ -z "$dockeruser" ]
+if [ ! -f "$cdir/config/hidden/$mode.env" ]
+then
+    echo "ENV file not found"
+    exit 1
+elif [ -z "$dockeruser" ]
 then
     echo "Docker Hub user is empty"
     exit 1
