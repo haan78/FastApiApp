@@ -23,6 +23,7 @@ then
     echo "Docker Hub AT is empty"
     exit 1
 elif [ -z "$dockercluster" ]
+then
     echo "Docker Hub cluster is empty"
     exit 1
 fi
