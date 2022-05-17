@@ -6,10 +6,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: finnp/create-file-action@master
-          env:
-            FILE_NAME: ./config/hidden/testdrive.env
-            FILE_DATA: ${{ secrets.ENV_FILE_STAGING }}      
       - name: Build Image and Push
-        run: sh hub.sh haan78 ${{ secrets.DOCKER_HUB_AT }} baris
+        env:
+          DHTOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+          EFILE: ${{ secrets.TEST_ENV_FILE }}
+        run: |
+          touch ./config/hidden/testdrive.env
+          echo $EFILE >> ./config/hidden/testdrive.env
+          sh hub.sh haan78 $DHTOKEN baris
