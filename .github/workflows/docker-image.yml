@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: finnp/create-file-action@master
-          with:
+          env:
             FILE_NAME: ./config/hidden/testdrive.env
             FILE_DATA: ${{ secrets.ENV_FILE_STAGING }}      
       - name: Build Image and Push
