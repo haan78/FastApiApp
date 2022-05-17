@@ -10,14 +10,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Override ENV file
-      with: 
-        EFDATA: ${{ secrets.ENV_FILE_STAGING }}
+    - name: Create ENV file       
       env: 
         EFDATA: ${{ secrets.ENV_FILE_STAGING }}
+
       run: |
         touch ./config/hidden/testdrive.env
         echo $EFDATA > ./config/hidden/testdrive.env
         cat ./config/hidden/testdrive.env
-    # - name: Build the Docker image
-    #   run: sh hub.sh haan78 ${{ secrets.DOCKER_HUB_AT }} baris
+     - name: Build the Docker image
+       run: sh hub.sh haan78 ${{ secrets.DOCKER_HUB_AT }} baris
