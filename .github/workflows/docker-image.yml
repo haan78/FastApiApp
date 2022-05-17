@@ -3,12 +3,11 @@ name: Docker Image CI
 on: workflow_dispatch
 
 jobs:     
-
   build:
     runs-on: ubuntu-latest
-    steps:    
-      - name: Create ENV file       
-        uses: actions/checkout@v3        
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Image and Push
         run: |
           touch ./config/hidden/testdrive.env
           echo ${{ secrets.ENV_FILE_STAGING }} > ./config/hidden/testdrive.env          
