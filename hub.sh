@@ -1,22 +1,31 @@
 #!/bin/sh
+cdir=$(pwd)
 
 #gerekli tanimlamalar
-imagename="fasvelte1"
-dockerhubserver=""
-dockeruser=$1
-dockeraccesstoken=$2
-dockercluster=$3
-mode=testdrive
-scritp=staging
-
-npmimg="$imagename/npm"
-#mevcut klasor
-cdir=$(pwd)
-nevfile=$cdir/config/hidden/$mode.env
+imagename=$1
+mode=$2
+scritp=$3
+nevfile=$cdir/config/$mode.env
+dockeruser=$DOCKER_USER
+dockeraccesstoken=$DOCKER_AT
+dockercluster=$DOCKER_CLUSTER
+dockerhubserver=$DOCKER_HUB_URL
 version=$(cat $cdir/version.txt)
-#dockeraccesstoken=$(cat $cdir/config/hidden/docker_hub_token.txt)
+npmimg="$imagename/npm"
 
-if [ ! -f "$nevfile" -o ! -s "$nevfile" ]
+if [ -z "$imagename" ]
+then
+    echo "Image name is missing"
+    exit 1
+elif [ -z "$mode" ]
+then
+    echo "Mode is not specify"
+    exit 1
+elif [ -z "$scritp" ]
+then
+    echo "Script name is not specify"
+    exit 1
+elif [ ! -f "$nevfile" -o ! -s "$nevfile" ]
 then
     echo "ENV file not found or empty $nevfile"
     exit 1
@@ -33,6 +42,7 @@ then
     echo "Docker Hub cluster is empty"
     exit 1
 fi
+
 
 #frontendi compile etmek icin npm i olustur
 docker build -f $cdir/DockerNpm -t $npmimg $cdir

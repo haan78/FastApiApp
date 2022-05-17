@@ -1,6 +1,9 @@
 FROM python:3.11.0a3-alpine3.15
 ARG MODE=production
 ARG VERSION=0.0/Alpha
+
+ENV APPMODE=${MODE}
+ENV VERSION=${VERSION}
 ENV TZ=Turkey
 RUN apk update \
     apk upgrade 
@@ -10,8 +13,7 @@ COPY ./config/piplist.txt /app/piplist.txt
 RUN pip install --upgrade pip\
     pip install --no-cache-dir -r /app/piplist.txt
     
-COPY ./config/hidden/${MODE}.env /app/.env
-RUN echo -e "\nVERSION=${VERSION}\nAPPMODE=${MODE}\nREBUILD=TESTDIRIVE" >> /app/.env
+COPY ./config/${MODE}.env /app/.env
 RUN cat /app/.env
 
 COPY ./backend /app/backend

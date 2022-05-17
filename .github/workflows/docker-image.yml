@@ -8,10 +8,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build Image and Push
-        env:
-          DHTOKEN: ${{ secrets.DOCKER_HUB_AT }}
-          EFILE: ${{ secrets.ENV_FILE_STAGING }}
+        env:          
+          JWTKEY: ${{ secrets.JWTKEY }}
+          DBCONN: ${{ secrets.DBCONN }}
+          DOCKER_AT: ${{ secrets.DOCKER_HUB_AT }}
+          DOCKER_USER: haan78
+          DOCKER_CLUSTER: baris
+          DOCKER_HUB_URL:
         run: |
-          touch ./config/hidden/testdrive.env
-          echo $EFILE >> ./config/hidden/testdrive.env
-          sh hub.sh haan78 $DHTOKEN baris
+          echo DBCONN=$DBCONN >> ./config/production.env
+          echo JWTKEY=$JWTKEY >> ./config/production.env
+          sh hub.sh fasvelte2 production staging
